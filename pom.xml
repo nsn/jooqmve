@@ -15,6 +15,7 @@
         <db.user>nsn</db.user>
         <db.password></db.password>
         <db.name>pgsqlcustomtype</db.name>
+        <db.url>jdbc:postgresql://localhost:5432/</db.url>
         <postgres.driver.version>42.1.4</postgres.driver.version>
     </properties>
 
@@ -51,6 +52,27 @@
 
     <build>
         <plugins>
+            <!-- exec -->
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>exec-maven-plugin</artifactId>
+              <version>1.2.1</version>
+              <executions>
+                <execution>
+                  <goals>
+                    <goal>java</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <configuration>
+                <mainClass>com.nightspawn.jooq.pgsqlcustomtype.MainClass</mainClass>
+                <arguments>
+                  <argument>${db.url}${db.name}</argument>
+                  <argument>${db.user}</argument>
+                  <argument>${db.password}</argument>
+                </arguments>
+              </configuration>
+            </plugin>
             <!-- multiple source directories -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -79,7 +101,7 @@
                     <!-- JDBC connection parameters -->
                     <jdbc>
                         <driver>org.postgresql.Driver</driver>
-                        <url>jdbc:postgresql://localhost:5432/${db.name}</url>
+                        <url>${db.url}${db.name}</url>
                         <user>${db.user}</user>
                         <password>${db.password}</password>
                         <!--
@@ -89,25 +111,10 @@
 
                     <!-- Generator parameters -->
                     <generator>
-                        <name>com.abusix.abusehq.sql.AHQGenerator</name>
                         <database>
                             <name>org.jooq.util.postgres.PostgresDatabase</name>
                             <includes>.*</includes>
-                            <excludes>
-                                schema_version
-                            </excludes>
-                            <!-- In case your database supports catalogs, e.g. SQL Server:
-                            <inputCatalog>public</inputCatalog>
-                              -->
                             <inputSchema>public</inputSchema>
-                            <forcedTypes>
-                                <forcedType>
-                                    <name>VARCHAR</name>
-                                    <userType>java.util.Map&lt;String, String&gt;</userType>
-                                    <binding>com.abusix.abusehq.sql.HStoreBinding</binding>
-                                    <types>hstore</types>
-                                </forcedType>
-                            </forcedTypes>
                         </database>
                         <generate>
                             <daos>true</daos>
@@ -115,11 +122,8 @@
                             <pojos>true</pojos>
                             <validationAnnotations>true</validationAnnotations>
                         </generate>
-                        <strategy>
-                            <name>com.abusix.abusehq.sql.AHQGeneratorStrategy</name>
-                        </strategy>
                         <target>
-                            <packageName>com.abusix.abusehq.sql.jooq</packageName>
+                            <packageName>com.nightspawn.jooq.pgsqlcustomtype.generated</packageName>
                             <directory>src/generated/java</directory>
                         </target>
                     </generator>
