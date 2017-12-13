@@ -1,0 +1,43 @@
+## generic files from OS
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+*.old
+*.new
+
+
+# generated class files
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# eclipse files
+.classpath
+.project
+.settings
+.pydevproject
+
+# intellij
+.idea/*
+*.iml
+
+# NetBeans
+nb-configuration.xml
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+!.gitignore
+target/
+server.log
+dump.rdb
+derby.log
+
